@@ -1,0 +1,694 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+    <channel>
+        <title></title>
+        <link>undefined</link>
+        <description>undefined</description>
+        <lastBuildDate>Wed, 20 Apr 2022 15:54:20 GMT</lastBuildDate>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>Joplin Pages Publisher</generator>
+        <item>
+            <title><![CDATA[numpy常用矩阵运算方法【转】 - 小天儿 - 博客园]]></title>
+            <guid>334048cdfbcb4d479268495ded17d16a</guid>
+            <pubDate>Fri, 29 Oct 2021 08:03:44 GMT</pubDate>
+            <content:encoded><![CDATA[<p>原文：<a title="http://blog.csdn.net/sinat_32547403/article/details/54017551" href="http://blog.csdn.net/sinat_32547403/article/details/54017551">http://blog.csdn.net/sinat_32547403/article/details/54017551</a></p>
+<p>目录：</p>
+<ol>
+<li>
+<p><a title="#t0" href="#t0">获取矩阵行数列数二维情况</a></p>
+</li>
+<li>
+<p><a title="#t1" href="#t1">矩阵的截取</a></p>
+</li>
+<li>
+<p><a title="#t2" href="#t2">按行列截取</a></p>
+</li>
+<li>
+<p><a title="#t3" href="#t3">按条件截取</a></p>
+</li>
+<li>
+<p><a title="#t4" href="#t4">矩阵的合并</a></p>
+</li>
+<li>
+<p><a title="#t5" href="#t5">通过函数创建矩阵</a></p>
+</li>
+<li>
+<p><a title="#t6" href="#t6">arange</a></p>
+</li>
+<li>
+<p><a title="#t7" href="#t7">linspace</a></p>
+</li>
+<li>
+<p><a title="#t8" href="#t8">logspace</a></p>
+</li>
+<li>
+<p><a title="#oneszeroseyeempty" href="#oneszeroseyeempty">ones、zeros、eye、empty</a></p>
+</li>
+<li>
+<p><a title="#t11" href="#t11">fromstring</a></p>
+</li>
+<li>
+<p><a title="#t12" href="#t12">fromfunction</a></p>
+</li>
+<li>
+<p><a title="#t13" href="#t13">矩阵的运算</a></p>
+</li>
+<li>
+<p><a title="#t14" href="#t14">常用矩阵运算符</a></p>
+</li>
+<li>
+<p><a title="#t15" href="#t15">常用矩阵函数</a></p>
+</li>
+<li>
+<p><a title="#t16" href="#t16">矩阵乘法点乘</a></p>
+</li>
+<li>
+<p><a title="#t17" href="#t17">矩阵的转置 aT</a></p>
+</li>
+<li>
+<p><a title="#t18" href="#t18">矩阵的逆 a1</a></p>
+</li>
+<li>
+<p><a title="#t19" href="#t19">矩阵信息获取如平均值</a></p>
+</li>
+<li>
+<p><a title="#t20" href="#t20">最大最小值</a></p>
+</li>
+<li>
+<p><a title="#t21" href="#t21">平均值</a></p>
+</li>
+<li>
+<p><a title="#t22" href="#t22">方差</a></p>
+</li>
+<li>
+<p><a title="#t23" href="#t23">标准差</a></p>
+</li>
+<li>
+<p><a title="#t24" href="#t24">中值</a></p>
+</li>
+</ol>
+<p>对于python中的numpy模块，一般用其提供的ndarray对象。 
+创建一个ndarray对象很简单，只要将一个list作为参数即可。 
+例如</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np #引入numpy库</p>
+<p>#创建一维的narray对象
+a = np.array([1,2,3,4,5])</p>
+<p>#创建二维的narray对象
+a2 = np.array([[1,2,3,4,5],[6,7,8,9,10]])</p>
+<p>#创建多维对象以其类推</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<hr />
+<h2 id="获取矩阵行数列数二维情况"><a id="t0" class="jop-noMdConv"></a>  获取矩阵行数列数（二维情况）</h2>
+<p>习惯了采用matlab进行数模的编程，要对矩阵进行遍历时，一般先获取矩阵的行数和列数。要获取narray对象的各维的长度，可以通过narray对象的shape属性</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np
+a = np.array([[1,2,3,4,5],[6,7,8,9,10]])</p>
+<p>print(a.shape) #结果返回一个tuple元组 (2L, 5L)
+print(a.shape[0]) #获得行数，返回 2
+print(a.shape[1]) #获得列数，返回 5</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<hr />
+<h2 id="矩阵的截取"><a id="t1" class="jop-noMdConv"></a> 矩阵的截取</h2>
+<h3 id="按行列截取"><a id="t2" class="jop-noMdConv"></a> 按行列截取</h3>
+<p>矩阵的截取和list相同，可以通过[]（方括号）来截取</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np
+a = np.array([[1,2,3,4,5],[6,7,8,9,10]])</p>
+<p>print(a[0:1]) #截取第一行,返回 [[1 2 3 4 5]]
+print(a[1,2:5]) #截取第二行，第三、四列，返回 [8 9]</p>
+<p>print(a[1,:]) #截取第二行,返回 [ 6  7  8  9 10]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<h3 id="按条件截取"><a id="t3" class="jop-noMdConv"></a> 按条件截取</h3>
+<p>按条件截取其实是在[]（方括号）中传入自身的布尔语句 
+例如</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a = np.array([[1,2,3,4,5],[6,7,8,9,10]])
+b = a[a&gt;6] # 截取矩阵a中大于6的元素，范围的是一维数组
+print(b) # 返回 [ 7  8  9 10]</p>
+<p># 其实布尔语句首先生成一个布尔矩阵，将布尔矩阵传入[]（方括号）实现截取
+print(a&gt;6)
+# 返回
+[[False False False False False]
+[False  True  True  True  True]]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>按条件截取应用较多的是对矩阵中满足一定条件的元素变成特定的值。 
+例如将矩阵中大于6的元素变成0。</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a = np.array([[1,2,3,4,5],[6,7,8,9,10]])
+print(a)
+#开始矩阵为
+[[ 1  2  3  4  5]
+[ 6  7  8  9 10]]</p>
+<p>a[a&gt;6] = 0
+print(a)
+#大于6清零后矩阵为
+[[1 2 3 4 5]
+[6 0 0 0 0]]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<hr />
+<h2 id="矩阵的合并"><a id="t4" class="jop-noMdConv"></a> 矩阵的合并</h2>
+<p>矩阵的合并可以通过numpy中的hstack方法和vstack方法实现</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a1 = np.array([[1,2],[3,4]])
+a2 = np.array([[5,6],[7,8]])</p>
+<p>#!注意 参数传入时要以列表list或元组tuple的形式传入
+print(np.hstack([a1,a2]))
+#横向合并，返回结果如下
+[[1 2 5 6]
+[3 4 7 8]]</p>
+<p>print(np.vstack((a1,a2)))
+#纵向合并，返回结果如下
+[[1 2]
+[3 4]
+[5 6]
+[7 8]]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>矩阵的合并也可以通过concatenatef方法。</p>
+<p>np.concatenate( (a1,a2), axis=0 )  等价于  np.vstack( (a1,a2) )</p>
+<p>np.concatenate( (a1,a2), axis=1 )  等价于  np.hstack( (a1,a2) )</p>
+<hr />
+<h2 id="通过函数创建矩阵"><a id="t5" class="jop-noMdConv"></a> 通过函数创建矩阵</h2>
+<p>numpy模块中自带了一些创建ndarray对象的函数，可以很方便的创建常用的或有规律的矩阵。</p>
+<h3 id="arange"><a id="t6" class="jop-noMdConv"></a>arange</h3>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a = np.arange(10) # 默认从0开始到10（不包括10），步长为1
+print(a) # 返回 [0 1 2 3 4 5 6 7 8 9]</p>
+<p>a1 = np.arange(5,10) # 从5开始到10（不包括10），步长为1
+print(a1) # 返回 [5 6 7 8 9]</p>
+<p>a2 = np.arange(5,20,2) # 从5开始到20（不包括20），步长为2
+print(a2) # 返回 [ 5  7  9 11 13 15 17 19]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<h3 id="linspace"><a id="t7" class="jop-noMdConv"></a> linspace</h3>
+<p>linspace()和matlab的linspace很类似，用于创建指定数量等间隔的序列，实际生成一个等差数列。</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a = np.linspace(0,10,7) # 生成首位是0，末位是10，含7个数的等差数列
+print(a)
+# 结果
+[  0.           1.66666667   3.33333333   5.         6.66666667  8.33333333  10.        ]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<h3 id="logspace"><a id="t8" class="jop-noMdConv"></a> logspace</h3>
+<p>linspace用于生成等差数列，而logspace用于生成等比数列。 
+下面的例子用于生成首位是10<sup class="jop-noMdConv">0</sup>，末位是10<sup class="jop-noMdConv">2</sup>，含5个数的等比数列。</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a = np.logspace(0,2,5)
+print(a)
+# 结果
+[   1.      3.16227766   10.           31.6227766   100.  ]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<h3 id="ones-zeros-eye-empty"><a id="t9" class="jop-noMdConv"></a> ones、zeros、eye、empty</h3>
+<p>ones创建全1矩阵 
+zeros创建全0矩阵 
+eye创建单位矩阵 
+empty创建空矩阵（实际有值）</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a_ones = np.ones((3,4)) # 创建3*4的全1矩阵
+print(a_ones)
+# 结果
+[[ 1.  1.  1.  1.]
+[ 1.  1.  1.  1.]
+[ 1.  1.  1.  1.]]</p>
+<p>a_zeros = np.zeros((3,4)) # 创建3*4的全0矩阵
+print(a_zeros)
+# 结果
+[[ 0.  0.  0.  0.]
+[ 0.  0.  0.  0.]
+[ 0.  0.  0.  0.]]</p>
+<p>a_eye = np.eye(3) # 创建3阶单位矩阵
+print(a_eye)
+# 结果
+[ 1.  0.  0.]
+[ 0.  1.  0.]
+[ 0.  0.  1.]]</p>
+<p>a_empty = np.empty((3,4)) # 创建3*4的空矩阵
+print(a_empty)
+# 结果
+[[  1.78006111e-306  -3.13259416e-294   4.71524461e-309   1.94927842e+289]
+[  2.10230387e-309   5.42870216e+294   6.73606381e-310   3.82265219e-297]
+[  6.24242356e-309   1.07034394e-296   2.12687797e+183   6.88703165e-315]]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<h3 id="fromstring"><a id="t11" class="jop-noMdConv"></a> fromstring</h3>
+<p>fromstring()方法可以将字符串转化成ndarray对象，需要将字符串数字化时这个方法比较有用，可以获得字符串的ascii码序列。</p>
+<p>a = “abcdef”
+b = np.fromstring(a,dtype=np.int8) # 因为一个字符为8为，所以指定dtype为np.int8
+print(b) # 返回 [ 97  98  99 100 101 102]</p>
+<h3 id="fromfunction"><a id="t12" class="jop-noMdConv"></a> fromfunction</h3>
+<p>fromfunction()方法可以根据矩阵的行号列号生成矩阵的元素。 
+例如创建一个矩阵，矩阵中的每个元素都为行号和列号的和。</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>def func(i,j):
+return i+j</p>
+<p>a = np.fromfunction(func,(5,6))
+# 第一个参数为指定函数，第二个参数为列表list或元组tuple,说明矩阵的大小
+print(a)
+# 返回
+[[ 0.  1.  2.  3.  4.  5.]
+[ 1.  2.  3.  4.  5.  6.]
+[ 2.  3.  4.  5.  6.  7.]
+[ 3.  4.  5.  6.  7.  8.]
+[ 4.  5.  6.  7.  8.  9.]]
+#注意这里行号的列号都是从0开始的</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<hr />
+<h2 id="矩阵的运算"><a id="t13" class="jop-noMdConv"></a> 矩阵的运算</h2>
+<h3 id="常用矩阵运算符"><a id="t14" class="jop-noMdConv"></a> 常用矩阵运算符</h3>
+<p>numpy中的ndarray对象重载了许多运算符，使用这些运算符可以完成矩阵间对应元素的运算。</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>+</td>
+<td>矩阵对应元素相加</td>
+</tr>
+<tr>
+<td>-</td>
+<td>矩阵对应元素相减</td>
+</tr>
+<tr>
+<td>*</td>
+<td>矩阵对应元素相乘</td>
+</tr>
+<tr>
+<td>/</td>
+<td>矩阵对应元素相除，如果都是整数则取商</td>
+</tr>
+<tr>
+<td>%</td>
+<td>矩阵对应元素相除后取余数</td>
+</tr>
+<tr>
+<td>**</td>
+<td>矩阵每个元素都取n次方，如**2：每个元素都取平方</td>
+</tr>
+</tbody>
+</table>
+<p>例如</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np
+a1 = np.array([[4,5,6],[1,2,3]])
+a2 = np.array([[6,5,4],[3,2,1]])</p>
+<p>print(a1+a2) # 相加
+# 结果
+[[10 10 10]
+[ 4  4  4]]</p>
+<p>print(a1/a2) # 整数相除取商
+# 结果
+[[0 1 1]
+[0 1 3]]</p>
+<p>print(a1%a2) # 相除取余数
+# 结果
+[[4 0 2]
+[1 0 0]]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<hr />
+<h3 id="常用矩阵函数"><a id="t15" class="jop-noMdConv"></a> 常用矩阵函数</h3>
+<p>同样地，numpy中也定义了许多函数，使用这些函数可以将函数作用于矩阵中的每个元素。 
+表格中默认导入了numpy模块，即 <code>import numpy as np</code></p>
+<p>a为ndarray对象。</p>
+<table>
+<thead>
+<tr>
+<th>矩阵函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>np.sin(a)</td>
+<td>对矩阵a中每个元素取正弦,sin(x)</td>
+</tr>
+<tr>
+<td>np.cos(a)</td>
+<td>对矩阵a中每个元素取余弦,cos(x)</td>
+</tr>
+<tr>
+<td>np.tan(a)</td>
+<td>对矩阵a中每个元素取正切,tan(x)</td>
+</tr>
+<tr>
+<td>np.arcsin(a)</td>
+<td>对矩阵a中每个元素取反正弦,arcsin(x)</td>
+</tr>
+<tr>
+<td>np.arccos(a)</td>
+<td>对矩阵a中每个元素取反余弦,arccos(x)</td>
+</tr>
+<tr>
+<td>np.arctan(a)</td>
+<td>对矩阵a中每个元素取反正切,arctan(x)</td>
+</tr>
+<tr>
+<td>np.exp(a)</td>
+<td>对矩阵a中每个元素取指数函数,e<sup class="jop-noMdConv">x</sup></td>
+</tr>
+<tr>
+<td>np.sqrt(a)</td>
+<td>对矩阵a中每个元素开根号√x</td>
+</tr>
+</tbody>
+</table>
+<p>例如</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a = np.array([[1,2,3],[4,5,6]])
+print(np.sin(a))
+# 结果
+[[ 0.84147098  0.90929743  0.14112001]
+[-0.7568025  -0.95892427 -0.2794155 ]]</p>
+<p>print(np.arcsin(a))
+# 结果
+C:\Users\Administrator\Desktop\learn.py:6: RuntimeWarning: invalid value encountered in arcsin
+print(np.arcsin(a))
+[[ 1.57079633         nan         nan]
+[        nan         nan         nan]]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>当矩阵中的元素不在定义域范围内，会产生RuntimeWarning，结果为nan(not a number)。</p>
+<p><a id="MathJax-Element-11-Frame" class="jop-noMdConv"></a><a id="MathJax-Span-76" class="jop-noMdConv"></a><a id="MathJax-Span-77" class="jop-noMdConv"></a><a id="MathJax-Span-78" class="jop-noMdConv"></a>[<a id="MathJax-Span-79" class="jop-noMdConv"></a>−<a id="MathJax-Span-80" class="jop-noMdConv"></a>1<a id="MathJax-Span-81" class="jop-noMdConv"></a>,<a id="MathJax-Span-82" class="jop-noMdConv"></a>1<a id="MathJax-Span-83" class="jop-noMdConv"></a>]</p>
+<hr />
+<h3 id="矩阵乘法点乘"><a id="t16" class="jop-noMdConv"></a>  矩阵乘法（点乘）</h3>
+<p>矩阵乘法必须满足矩阵乘法的条件，即第一个矩阵的列数等于第二个矩阵的行数。 
+矩阵乘法的函数为 dot 
+例如</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a1 = np.array([[1,2,3],[4,5,6]]) # a1为2<em>3矩阵
+a2 = np.array([[1,2],[3,4],[5,6]]) # a2为3</em>2矩阵</p>
+<p>print(a1.shape[1]==a2.shape[0]) # True, 满足矩阵乘法条件
+print(a1.dot(a2))
+# a1.dot(a2)相当于matlab中的a1*a2
+# 而python中的a1*a2相当于matlab中的a1.*a2
+# 结果
+[[22 28]
+[49 64]]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<hr />
+<h3 id="矩阵的转置-at"><a id="t17" class="jop-noMdConv"></a> 矩阵的转置 <a id="MathJax-Element-12-Frame" class="jop-noMdConv"></a><a id="MathJax-Span-84" class="jop-noMdConv"></a><a id="MathJax-Span-85" class="jop-noMdConv"></a><a id="MathJax-Span-86" class="jop-noMdConv"></a><a id="MathJax-Span-87" class="jop-noMdConv"></a>a<a id="MathJax-Span-88" class="jop-noMdConv"></a><a id="MathJax-Span-89" class="jop-noMdConv"></a><a id="MathJax-Span-90" class="jop-noMdConv"></a>T</h3>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a = np.array([[1,2,3],[4,5,6]])</p>
+<p>print(a.transpose())
+# 结果
+[[1 4]
+[2 5]
+[3 6]]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>矩阵的转置还有更简单的方法，就是a.T</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a = np.array([[1,2,3],[4,5,6]])
+print(a.T)
+# 结果
+[[1 4]
+[2 5]
+[3 6]]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<hr />
+<h3 id="矩阵的逆-a1"><a id="t18" class="jop-noMdConv"></a> 矩阵的逆 <a id="MathJax-Element-13-Frame" class="jop-noMdConv"></a><a id="MathJax-Span-91" class="jop-noMdConv"></a><a id="MathJax-Span-92" class="jop-noMdConv"></a><a id="MathJax-Span-93" class="jop-noMdConv"></a><a id="MathJax-Span-94" class="jop-noMdConv"></a>a<a id="MathJax-Span-95" class="jop-noMdConv"></a><a id="MathJax-Span-96" class="jop-noMdConv"></a><a id="MathJax-Span-97" class="jop-noMdConv"></a>−<a id="MathJax-Span-98" class="jop-noMdConv"></a>1</h3>
+<p>求矩阵的逆需要先导入<code>numpy.linalg</code>，用linalg的inv函数来求逆。 
+矩阵求逆的条件是矩阵的行数和列数相同。</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np
+import numpy.linalg as lg</p>
+<p>a = np.array([[1,2,3],[4,5,6],[7,8,9]])</p>
+<p>print(lg.inv(a))
+# 结果
+[[ -4.50359963e+15   9.00719925e+15  -4.50359963e+15]
+[  9.00719925e+15  -1.80143985e+16   9.00719925e+15]
+[ -4.50359963e+15   9.00719925e+15  -4.50359963e+15]]</p>
+<p>a = np.eye(3) # 3阶单位矩阵
+print(lg.inv(a)) # 单位矩阵的逆为他本身
+# 结果
+[[ 1.  0.  0.]
+[ 0.  1.  0.]
+[ 0.  0.  1.]]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<hr />
+<h2 id="矩阵信息获取如平均值"><a id="t19" class="jop-noMdConv"></a>  矩阵信息获取（如平均值）</h2>
+<h3 id="最大最小值"><a id="t20" class="jop-noMdConv"></a> 最大最小值</h3>
+<p>获得矩阵中元素最大最小值的函数分别是<code>max</code>和<code>min</code>，可以获得整个矩阵、行或列的最大最小值。 
+例如</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a = np.array([[1,2,3],[4,5,6]])
+print(a.max()) #获取整个矩阵的最大值 结果： 6
+print(a.min()) #结果：1</p>
+<p># 可以指定关键字参数axis来获得行最大（小）值或列最大（小）值
+# axis=0 行方向最大（小）值，即获得每列的最大（小）值
+# axis=1 列方向最大（小）值，即获得每行的最大（小）值
+# 例如</p>
+<p>print(a.max(axis=0))
+# 结果为 [4 5 6]</p>
+<p>print(a.max(axis=1))
+# 结果为 [3 6]</p>
+<p># 要想获得最大最小值元素所在的位置，可以通过argmax函数来获得
+print(a.argmax(axis=1))
+# 结果为 [2 2]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<h3 id="平均值"><a id="t21" class="jop-noMdConv"></a> 平均值</h3>
+<p>获得矩阵中元素的平均值可以通过函数<code>mean()</code>。同样地，可以获得整个矩阵、行或列的平均值。</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a = np.array([[1,2,3],[4,5,6]])
+print(a.mean()) #结果为： 3.5</p>
+<p># 同样地，可以通过关键字axis参数指定沿哪个方向获取平均值
+print(a.mean(axis=0)) # 结果 [ 2.5  3.5  4.5]
+print(a.mean(axis=1)) # 结果 [ 2.  5.]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<h3 id="方差"><a id="t22" class="jop-noMdConv"></a> 方差</h3>
+<p>方差的函数为<code>var()</code>,方差函数<code>var()</code>相当于函数<code>mean(abs(x - x.mean())**2)</code>,其中x为矩阵。</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a = np.array([[1,2,3],[4,5,6]])
+print(a.var()) # 结果 2.91666666667</p>
+<p>print(a.var(axis=0)) # 结果 [ 2.25  2.25  2.25]
+print(a.var(axis=1)) # 结果 [ 0.66666667  0.66666667]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<h3 id="标准差"><a id="t23" class="jop-noMdConv"></a> 标准差</h3>
+<p>标准差的函数为<code>std()</code>。 
+<code>std()</code>相当于<code>sqrt(mean(abs(x - x.mean())**2))</code>，或相当于<code>sqrt(x.var())</code>。</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a = np.array([[1,2,3],[4,5,6]])
+print(a.std()) # 结果 1.70782512766</p>
+<p>print(a.std(axis=0)) # 结果 [ 1.5  1.5  1.5]
+print(a.std(axis=1)) # 结果 [ 0.81649658  0.81649658]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<hr />
+<h3 id="中值"><a id="t24" class="jop-noMdConv"></a> 中值</h3>
+<p>中值指的是将序列按大小顺序排列后，排在中间的那个值，如果有偶数个数，则是排在中间两个数的平均值。</p>
+<p>例如序列[5,2,6,4,2]，按大小顺序排成 [2,2,4,5,6]，排在中间的数是4，所以这个序列的中值是4。</p>
+<p>又如序列[5,2,6,4,3,2]，按大小顺序排成 [2,2,3,4,5,6]，因为有偶数个数，排在中间两个数是3、4，所以这个序列中值是3.5。</p>
+<p>中值的函数是median()，调用方法为numpy.median(x,[axis])，axis可指定轴方向，默认axis=None，对所有数去中值。</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np
+x = np.array([[1,2,3],[4,5,6]])</p>
+<p>print(np.median(x))  # 对所有数取中值
+# 结果
+3.5</p>
+<p>print(np.median(x,axis=0))  # 沿第一维方向取中值
+# 结果
+[ 2.5  3.5  4.5]</p>
+<p>print(np.median(x,axis=1))  # 沿第二维方向取中值
+# 结果
+[ 2.  5.]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>求和</p>
+<p>矩阵求和的函数是sum()，可以对行，列，或整个矩阵求和</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a = np.array([[1,2,3],[4,5,6]])</p>
+<p>print(a.sum())           # 对整个矩阵求和
+# 结果 21</p>
+<p>print(a.sum(axis=0)) # 对行方向求和
+# 结果 [5 7 9]</p>
+<p>print(a.sum(axis=1)) # 对列方向求和
+# 结果 [ 6 15]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>累积和</p>
+<p>某位置累积和指的是该位置之前(包括该位置)所有元素的和。</p>
+<p>例如序列[1,2,3,4,5]，其累计和为[1,3,6,10,15]，即第一个元素为1，第二个元素为1+2=3，……，第五个元素为1+2+3+4+5=15。</p>
+<p>矩阵求累积和的函数是cumsum()，可以对行，列，或整个矩阵求累积和。</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+<p>import numpy as np</p>
+<p>a = np.array([[1,2,3],[4,5,6]])</p>
+<p>print(a.cumsum())            # 对整个矩阵求累积和
+# 结果 [ 1  3  6 10 15 21]</p>
+<p>print(a.cumsum(axis=0))  # 对行方向求累积和
+# 结果
+[[1 2 3]
+[5 7 9]]</p>
+<p>print(a.cumsum(axis=1))  # 对列方向求累积和
+# 结果
+[[ 1  3  6]
+[ 4  9 15]]</p>
+<p><img src="/_resources/700a256947404e53bfbde1f7bf5f20e2.gif" /></p>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[(11条消息) 机器学习-数据归一化方法（Normalization Method）_Microstrong-CSDN博客_数据归一化]]></title>
+            <guid>1dac274819ce411f8c8080443530b984</guid>
+            <pubDate>Sat, 02 Oct 2021 08:41:58 GMT</pubDate>
+            <content:encoded><![CDATA[<p>我的个人<strong>微信公众号：Microstrong</strong></p>
+<p><strong>微信公众号ID：MicrostrongAI</strong></p>
+<p>**公众号介绍：**Microstrong(小强)同学主要研究机器学习、深度学习、计算机视觉、智能对话系统相关内容，分享在学习过程中的读书笔记！期待您的关注，欢迎一起学习交流进步！</p>
+<p><a title="https://zhuanlan.zhihu.com/Microstrong" href="https://zhuanlan.zhihu.com/Microstrong">知乎专栏：https://zhuanlan.zhihu.com/Microstrong</a></p>
+<p>个人博客：<a title="https://blog.csdn.net/program_developer" href="https://blog.csdn.net/program_developer">https://blog.csdn.net/program_developer</a></p>
+<h2 id="一-出现背景"><a id="t0" class="jop-noMdConv"></a>一、出现背景：</h2>
+<p><img src="/_resources/d0feac37216a4cec89f7610509ee631e.png" /></p>
+<p>从左至右来看，第一个模型是一个线性模型，拟合度很低，也称作欠拟合（Underfitting），不能很好地适应我们的训练集；第三个模型是一个高次方的模型，属于过度拟合，虽然能很好的适应我们的训练数据集，但是在新输入变量进行预测的时候，可能效果会很差。第二个模型可能是刚刚适合我们数据的模型。</p>
+<p><strong>那么问题来了，如果我们发现这样过度拟合的情况，如何处理呢？</strong></p>
+<p><strong>有两种方式：</strong></p>
+<p><strong>1. 丢弃一些不能帮助我们正确预测的特征。采用的方法如下：</strong></p>
+<ul>
+<li>** 手工选择保留哪些特征。**</li>
+<li><strong>使用一些模型选择算法来帮忙降维。（例如PCA等）</strong></li>
+</ul>
+<p><strong>2. 归一化处理</strong></p>
+<ul>
+<li>** 保留所有的特征，但是减少参数的大小（或者是说：减少参数的重要性）**</li>
+</ul>
+<h2 id="二-定义"><a id="t1" class="jop-noMdConv"></a>二、定义：</h2>
+<p>不同的评价指标往往具有不同的量纲（例如：对于评价房价来说量纲指：面积、房价数、楼层等；对于预测某个人患病率来说量纲指：身高、体重等。）和量纲单位（例如：面积单位：平方米、平方厘米等；身高：米、厘米等），这样的情况会影响到数据分析的结果，为了消除指标之间量纲的影响，需要进行数据标准化处理，以解决数据指标之间的可比性。原始数据经过数据标准化处理后，各指标处于同一数量级，适合进行综合对比评价。</p>
+<h2 id="三-优点"><a id="t2" class="jop-noMdConv"></a>三、优点：</h2>
+<p><strong>（1）归一化后加快了梯度下降求最优解的速度。</strong></p>
+<p><strong>（2）归一化有可能提高精度（归一化是让不同维度之间的特征在数值上有一定的比较性）。</strong></p>
+<p><strong>解释（1）加快梯度下降求最优解的速度：</strong></p>
+<p>例子：假定为了预测房子价格，自变量为面积，房间数两个，因变量为房价。</p>
+<p>那么可以得到的公式为：</p>
+<p><img src="/_resources/23271da81adb47a98f14e57a446a1a5a.png" /></p>
+<p>首先我们给出两张图代表数据是否均一化的最优解寻解过程。</p>
+<p><strong>未归一化：</strong></p>
+<p><img src="/_resources/2022482dda8a4428a70f0111565027b4.jpg" /></p>
+<p><strong>归一化之后：</strong></p>
+<p><img src="/_resources/ec06992a47054bdb9c85c6443f865a39.jpg" /></p>
+<p>我们在寻找最优解的过程中也就是在使得损失函数值最小的theta1、theta2。上述两幅图代表的是损失函数的等高线。我们很容易看出，当数据没有归一化的时候，面积数的范围可以从0-1000，房间数的范围一般为0-10，可以看出面积数的取值范围远大于房间数。</p>
+<p><strong>归一化和没有归一化的影响：</strong></p>
+<p>这样造成的影响就是在形成损失函数的时候：</p>
+<p>数据没有归一化的表达式可以为：</p>
+<p><img src="/_resources/759d7cac77ef4667b0eec9215c342bd5.png" /></p>
+<p>造成图像的等高线为类似的椭圆形状，最优解的寻优过程如下图所示：</p>
+<p><img src="/_resources/2022482dda8a4428a70f0111565027b4.jpg" /></p>
+<p>而数据归一化后，损失函数的表达式可以表示为：</p>
+<p><strong><img src="/_resources/af12af8583514d35b3e1b9b17ff29f7d.png" /></strong></p>
+<p>其中变量的前面系数都在【0-1】范围之间，则图像的等高线为类似的圆形形状，最优解的寻优过程如下图所示:</p>
+<p><img src="/_resources/ec06992a47054bdb9c85c6443f865a39.jpg" /></p>
+<p>从上面可以看出，数据归一化后，最优解的寻优过程明显会变得平缓，更容易正确的收敛到最优解。</p>
+<p><strong>解释：</strong>（2）归一化有可能提高精度（归一化是让不同维度之间的特征在数值上有一定的比较性）。****</p>
+<p>一些分类器需要计算样本之间的距离（如欧式距离），例如KNN。如果一个特征值域范围非常大，那么距离计算就主要取决于这个特征，从而与实际情况不符。（比如，这时实际情况是值域范围小的特征更重要）。</p>
+<h2 id="四-两种常用的归一化方法"><a id="t3" class="jop-noMdConv"></a>四、两种常用的归一化方法：</h2>
+<p>（1）min-max标准化</p>
+<p>（2）Z-score标准化方法</p>
+<h3 id="1min-max标准化min-max-normalization线性函数归一化"><a id="t4" class="jop-noMdConv"></a><strong>（1）min-max标准化（Min-Max Normalization）（线性函数归一化）</strong></h3>
+<ul>
+<li><strong>定义：也称为离差标准化，是对原始数据的线性变换，使得结果映射到0-1之间。</strong></li>
+<li><strong>本质：把数变为【0,1】之间的小数。</strong></li>
+<li><strong>转换函数：（X-Min）/(Max-Min)</strong></li>
+<li><strong>如果想要将数据映射到-1,1，则将公式换成：（X-Mean）/(Max-Min)</strong></li>
+</ul>
+<p>**其中：**max为样本数据的最大值，min为样本数据的最小值，Mean表示数据的均值。</p>
+<p><strong>缺陷：<strong>当有新数据加入时，可导致max和min的变化，需要重新定义</strong>。</strong></p>
+<h3 id="20均值标准化z-score-standardization"><a id="t5" class="jop-noMdConv"></a>（2）0均值标准化（Z-score standardization）</h3>
+<ul>
+<li><strong>定义：这种方法给与原始数据的均值（mean）和标准差（standard deviation）进行数据的标准化。经过处理的数据符合标准正态分布，即均值为0，标准差为1.</strong></li>
+<li><strong>本质：把有量纲表达式变成无量纲表达式。</strong></li>
+<li><strong>转换函数：（X-Mean）/(Standard deviation)</strong></li>
+</ul>
+<p><strong>其中，Mean为所有样本数据的均值。Standard deviation为所有样本数据的标准差。</strong></p>
+<h2 id="五-两种归一化方法的使用场景"><a id="t6" class="jop-noMdConv"></a><strong>五、两种归一化方法的使用场景：</strong></h2>
+<p><strong>（1）在分类、聚类算法中，需要使用距离来度量相似性的时候、或者使用PCA技术进行降维的时候，第二种方法(Z-score standardization)表现更好。</strong></p>
+<p><strong>因为：第一种方法(线性变换后)，其协方差产生了倍数值的缩放，因此这种方式无法消除量纲对方差、协方差的影响，对PCA分析影响巨大；同时，由于量纲的存在，使用不同的量纲、距离的计算结果会不同。</strong></p>
+<p><strong>（2）在不涉及距离度量、协方差计算、数据不符合正太分布的时候，可以使用第一种方法或其他归一化方法。比如图像处理中，将RGB图像转换为灰度图像后将其值限定在（0 ，255）的范围。</strong></p>
+<p><strong>因为：第二种归一化方式中，新的数据由于对方差进行了归一化，这时候每个维度的量纲其实已经等价了，每个维度都服从均值为0、方差1的正态分布，在计算距离的时候，每个维度都是去量纲化的，避免了不同量纲的选取对距离计算产生的巨大影响。</strong></p>
+<p><strong>为什么在距离度量计算相似性、PCA中使用第二种方法(Z-score standardization)会更好呢？我们进行了以下的推导分析：</strong></p>
+<p><strong>归一化方法对方差、协方差的影响：假设我们数据为2个维度（X、Y）,首先看均值为0对方差、协方差的影响：</strong></p>
+<p><strong>我们使用Z-score标准化进行计算，我们先不做方差归一化，只做0均值化为:</strong></p>
+<p><strong><img src="/_resources/7a2c5df22f48416fbd0b7c32fcbadf18.png" /></strong></p>
+<p><strong>新数据的协方差为：</strong></p>
+<p><strong><img src="/_resources/e97909a2768a4358a44afaa3da50ae62.png" /></strong></p>
+<p><strong>由于</strong></p>
+<p><strong><img src="/_resources/244b5a1e3a0e41e0a0251a21134568ab.png" /></strong></p>
+<p><strong>因此：</strong></p>
+<p><strong><img src="/_resources/f249124683774477ae39df6264c7017e.png" /></strong></p>
+<p><strong>而原始数据协方差为：</strong></p>
+<p><strong><img src="/_resources/0ee3a48862674ad0bc044cdae23d40c8.png" /><img src="/_resources/2ecd22162f7a406baf4808c9150d526c.png" /></strong></p>
+<p><strong>因此：<img src="/_resources/732ee97bc3bb43d3815db1cf94418ebd.png" /></strong></p>
+<p><strong>做方差归一化后：</strong></p>
+<p><strong><img src="/_resources/94bba9c14cdf4f65a416ebd84c283383.png" />                 <img src="/_resources/a608eb1c57d643eb8805967a9e5dc676.png" /></strong></p>
+<p><strong>方差归一化后的协方差为：</strong></p>
+<p><strong><img src="/_resources/175d72fa0ed04a9bbb05ec804c059688.png" /><img src="/_resources/0d3396f4cd7540c8b3c0938d5d23c3e2.png" /><img src="/_resources/55549ffb5e9b44289bdd30c18a2d9041.png" /><img src="/_resources/85f48fd813cf4903926b841b3e4fe9ea.png" /></strong></p>
+<p><strong>使用Min-Max标准化方法进行计算，为了方便分析，我们只对X维进行线性函数变换</strong></p>
+<p><strong><img src="/_resources/66eff0b3cb9e43da95940f348c7a8dd8.png" /></strong></p>
+<p><strong>计算协方差：</strong></p>
+<p><strong><img src="/_resources/30012958187541319931bf0ad0646547.png" /><img src="/_resources/213aaa11740b4bb8958cc39dd00b6d4b.png" /></strong></p>
+<h2 id="六-总结"><a id="t7" class="jop-noMdConv"></a><strong>六、总结：</strong></h2>
+<p><strong>（1）使用Max-Min标准化后，其协方差产生了倍数值得缩放，因此这种方式无法消除量纲对方差、协方差的影响，对PCA分析影响巨大；同时由于量纲的存在，使用不同的量纲，距离的计算结果会不同。</strong></p>
+<p><strong>（2）在Z-score标准化（0均值标准化）中，新的数据由于对方差进行了归一化，这时候每个维度的量纲其实已经等价了，每个维度都服从均值为0,、方差为1的正态分布，在计算距离的时候，每个维度都是去量纲化的，避免了不同量纲的选取对距离计算产生的巨大影响。</strong></p>
+<p><strong>总的来说，在算法后续计算中，涉及距离度量（聚类分析）或者协方差分析（PCA、LDA等）的，同时数据分布可以近似为状态分布，应当使用0均值化的归一方法。其它应用中，根据具体情况选用合适的归一化方法。</strong></p>
+<h2 id="七-reference"><a id="t8" class="jop-noMdConv"></a><strong>七、Reference：</strong></h2>
+<p><strong>【1】<a title="http://blog.csdn.net/yehui_qy/article/details/53787386" href="http://blog.csdn.net/yehui_qy/article/details/53787386">http://blog.csdn.net/yehui_qy/article/details/53787386</a></strong></p>
+<p><strong>【2】<a title="http://blog.csdn.net/zbc1090549839/article/details/44103801" href="http://blog.csdn.net/zbc1090549839/article/details/44103801">http://blog.csdn.net/zbc1090549839/article/details/44103801</a></strong></p>
+<p><strong>【3】知乎：处理数据时不进行归一化会有什么影响？归一化的作用是什么？什么时候需要归一化？有哪些归一化的方法？ - 忆臻的回答 - 知乎  <a title="https://www.zhihu.com/question/20455227/answer/197897298" href="https://www.zhihu.com/question/20455227/answer/197897298">https://www.zhihu.com/question/20455227/answer/197897298</a></strong></p>
+<p><strong>【4】<a title="http://blog.csdn.net/mysteryhaohao/article/details/51261300" href="http://blog.csdn.net/mysteryhaohao/article/details/51261300">http://blog.csdn.net/mysteryhaohao/article/details/51261300</a></strong></p>
+]]></content:encoded>
+        </item>
+        <item>
+            <title><![CDATA[关于PLA"淬火"]]></title>
+            <guid>06f6f4a05ac24c68a4f4536027b5b0e1</guid>
+            <pubDate>Mon, 13 Apr 2020 02:19:34 GMT</pubDate>
+            <content:encoded><![CDATA[把普通的pla放烤箱里110摄氏度烤一小时再慢慢冷却能耐温150摄氏度左右(<strong>贴吧找到的</strong>)]]></content:encoded>
+        </item>
+    </channel>
+</rss>
